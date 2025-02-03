@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-const _animationDuration = 1265;
+const _animationDuration = 1500;
 
 const _fadeTransitionStart = 1050.0;
 const _fadeTransitionEnd = _animationDuration;
@@ -320,7 +320,7 @@ class _CirclePainter extends CustomPainter {
 
     final circlePaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = const Color(0xFF9FE870);
+      ..color = const Color.fromRGBO(16, 41, 0, 1);
 
     canvas.drawCircle(
       Offset(side * 0.5, side * 0.5),

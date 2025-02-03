@@ -1,3 +1,4 @@
+import 'package:chat_app/features/Auth/presentation/views/auth_screens.dart';
 import 'package:chat_app/features/splash/presentation/views/wise_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -76,7 +77,7 @@ class _AppLoaderState extends State<AppLoader>
                   return const SizedBox.shrink();
                 }
 
-                return Scaffold();
+                return AuthScreen();
               },
             ),
             ValueListenableBuilder(
