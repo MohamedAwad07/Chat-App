@@ -1,4 +1,3 @@
-import 'package:chat_app/features/Auth/presentation/views/auth_screens.dart';
 import 'package:chat_app/features/home/presentation/views/custom_drawer.dart';
 import 'package:chat_app/features/splash/presentation/views/wise_splash_screen.dart';
 import 'package:flutter/material.dart';
