@@ -320,7 +320,7 @@ class _CirclePainter extends CustomPainter {
 
     final circlePaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = const Color.fromRGBO(16, 41, 0, 1);
+      ..color = const Color.fromARGB(255, 38, 97, 1);
 
     canvas.drawCircle(
       Offset(side * 0.5, side * 0.5),
@@ -337,7 +337,7 @@ class _CirclePainter extends CustomPainter {
 
     final arrowPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color = const Color(0xFF163300)
+      ..color =  const Color.fromARGB(255, 180, 255, 133)
       ..strokeJoin = StrokeJoin.round
       ..strokeWidth = side / 15 - 2.8;
 

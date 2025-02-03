@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Chat App',
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       home:const AppLoader(),

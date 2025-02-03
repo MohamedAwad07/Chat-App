@@ -61,7 +61,9 @@ class LoginForm extends StatelessWidget {
               ),
             ],
           ),
-
+          SizedBox(
+            height: 24,
+          ),
           // Login Button
           CustomActionButton(
             text: "Log In",

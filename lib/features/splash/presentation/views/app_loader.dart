@@ -1,9 +1,9 @@
 import 'package:chat_app/features/Auth/presentation/views/auth_screens.dart';
+import 'package:chat_app/features/home/presentation/views/custom_drawer.dart';
 import 'package:chat_app/features/splash/presentation/views/wise_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-
 
 class AppLoader extends StatefulWidget {
   const AppLoader({super.key});
@@ -12,8 +12,7 @@ class AppLoader extends StatefulWidget {
   State<AppLoader> createState() => _AppLoaderState();
 }
 
-class _AppLoaderState extends State<AppLoader>
-    with SingleTickerProviderStateMixin {
+class _AppLoaderState extends State<AppLoader> with SingleTickerProviderStateMixin {
   final _isSplashScreenVisible = ValueNotifier(true);
 
   final _data = ValueNotifier<AppData?>(null);
@@ -77,7 +76,7 @@ class _AppLoaderState extends State<AppLoader>
                   return const SizedBox.shrink();
                 }
 
-                return AuthScreen();
+                return CustomDrawer();
               },
             ),
             ValueListenableBuilder(

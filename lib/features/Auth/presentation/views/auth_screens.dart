@@ -57,19 +57,21 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Row(
                         children: [
                           CustomTextButton(
+                            isWhite: isLogin,
                             text: "Log In",
                             onPressed: () {
                               setState(() {
-                                isLogin = true; 
+                                isLogin = true;
                               });
                             },
                           ),
                           SizedBox(width: 10),
                           CustomTextButton(
+                            isWhite: !isLogin,
                             text: "Sign Up",
                             onPressed: () {
                               setState(() {
-                                isLogin = false; 
+                                isLogin = false;
                               });
                             },
                           ),
