@@ -1,4 +1,4 @@
-import 'package:chat_app/features/home/presentation/views/custom_drawer.dart';
+import 'package:chat_app/features/Auth/presentation/auth_gate.dart';
 import 'package:chat_app/features/splash/presentation/views/wise_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -75,7 +75,7 @@ class _AppLoaderState extends State<AppLoader> with SingleTickerProviderStateMix
                   return const SizedBox.shrink();
                 }
 
-                return CustomDrawer();
+                return AuthGate();
               },
             ),
             ValueListenableBuilder(

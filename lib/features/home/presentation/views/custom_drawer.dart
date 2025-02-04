@@ -1,3 +1,7 @@
+import 'package:chat_app/core/service%20locator/service_locator.dart';
+import 'package:chat_app/features/Auth/data/repos/repos.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -139,9 +143,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
             Text("Logout", style: TextStyle(color: Colors.white)),
           ],
         ),
-        onTap: () {
-          drawerState.closeDrawer();
-          setState(() {});
+        onTap: () async {
+          final authService = AuthServiceImpl(auth: sl.get<FirebaseAuth>(), firestore: sl.get<FirebaseFirestore>());
+          try {
+            await authService.logout();
+          } catch (e) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(e.toString()),
+              ),
+            );
+          }
         },
       ),
     );

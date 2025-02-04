@@ -1,5 +1,4 @@
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_action_button.dart';
-import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_login_options_button.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -11,12 +10,16 @@ class RegisterForm extends StatelessWidget {
     required this.formKey,
     required this.onPressed,
     required this.usernameController,
+    required this.confirmPasswordController,
   });
+
   final GlobalKey<FormState> formKey;
+  final TextEditingController usernameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final TextEditingController usernameController;
+  final TextEditingController confirmPasswordController;
   final void Function() onPressed;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -24,48 +27,75 @@ class RegisterForm extends StatelessWidget {
       child: Column(
         spacing: 16,
         children: [
+          // Username Field
           CustomTextFormField(
             labelText: 'Username',
             hintText: 'Example123',
             controller: usernameController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a username';
+              }
+              if (value.length < 3) {
+                return 'Username must be at least 3 characters';
+              }
+              return null;
+            },
           ),
           CustomTextFormField(
             labelText: 'Email',
             hintText: 'example@gmail.com',
             controller: emailController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your email';
+              }
+              if (!value.contains('@')) {
+                return 'Please enter a valid email';
+              }
+              return null;
+            },
           ),
           CustomTextFormField(
             labelText: 'Password',
             hintText: 'Enter your password',
             obscureText: true,
             controller: passwordController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a password';
+              }
+              if (value.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
+          ),
+          CustomTextFormField(
+            labelText: 'Confirm Password',
+            hintText: 'Confirm your password',
+            obscureText: true,
+            controller: confirmPasswordController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please confirm your password';
+              }
+              if (value != passwordController.text) {
+                return 'Passwords do not match';
+              }
+              return null;
+            },
           ),
           SizedBox(
-            height: 8,
+            height: 24,
           ),
-          // Login Button
           CustomActionButton(
             text: "Register",
-            onPressed: onPressed,
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Column(
-            spacing: 24,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomLoginOptions(
-                text: 'Continue with Google',
-                imagePath: 'assets/images/Google.svg',
-                onPressed: () {},
-              ),
-              CustomLoginOptions(
-                text: 'Continue with Facebook',
-                imagePath: 'assets/images/Facebook.svg',
-                onPressed: () {},
-              ),
-            ],
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                onPressed();
+              }
+            },
           ),
         ],
       ),

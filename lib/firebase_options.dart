@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -26,8 +27,6 @@ class DefaultFirebaseOptions {
         return ios;
       case TargetPlatform.macOS:
         return macos;
-      case TargetPlatform.windows:
-        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -40,8 +39,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBXQ6Tr71L6era0jH8iscrfjMHPDkq-nV0',
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: dotenv.env['WEB_API_KEY'] ?? '',
     appId: '1:788342188841:web:4e4e2d02dabf3fc324a538',
     messagingSenderId: '788342188841',
     projectId: 'chat-app-7fa73',
@@ -50,16 +49,16 @@ class DefaultFirebaseOptions {
     measurementId: 'G-YX2LESLWF2',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAmlXnTTyQv5GghF5v3iiJV0IQGT-vajpQ',
+  static  FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['ANDROID_API_KEY'] ?? '',
     appId: '1:788342188841:android:440751f2ce567fcd24a538',
     messagingSenderId: '788342188841',
     projectId: 'chat-app-7fa73',
     storageBucket: 'chat-app-7fa73.firebasestorage.app',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDSp-jVSxLbjdp9XPMumWwrqT9e8RXIcy4',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env['IOS_API_KEY'] ?? '',
     appId: '1:788342188841:ios:0e1e82c87916431c24a538',
     messagingSenderId: '788342188841',
     projectId: 'chat-app-7fa73',
@@ -68,8 +67,8 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.chatApp',
   );
 
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDSp-jVSxLbjdp9XPMumWwrqT9e8RXIcy4',
+  static FirebaseOptions macos = FirebaseOptions(
+    apiKey: dotenv.env['MACOS_API_KEY'] ?? '',
     appId: '1:788342188841:ios:0e1e82c87916431c24a538',
     messagingSenderId: '788342188841',
     projectId: 'chat-app-7fa73',
@@ -78,13 +77,5 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.chatApp',
   );
 
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBXQ6Tr71L6era0jH8iscrfjMHPDkq-nV0',
-    appId: '1:788342188841:web:4e4e2d02dabf3fc324a538',
-    messagingSenderId: '788342188841',
-    projectId: 'chat-app-7fa73',
-    authDomain: 'chat-app-7fa73.firebaseapp.com',
-    storageBucket: 'chat-app-7fa73.firebasestorage.app',
-    measurementId: 'G-YX2LESLWF2',
-  );
+  
 }

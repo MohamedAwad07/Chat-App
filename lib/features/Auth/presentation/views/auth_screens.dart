@@ -1,3 +1,7 @@
+import 'package:chat_app/core/service%20locator/service_locator.dart';
+import 'package:chat_app/features/Auth/data/repos/repos.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_text_button.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/fixed_header.dart';
@@ -13,10 +17,13 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final _loginFormKey = GlobalKey<FormState>(); // Separate key for login
+  final _registerFormKey = GlobalKey<FormState>(); // Separate key for registration
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final authService = AuthServiceImpl(auth: sl.get<FirebaseAuth>(), firestore: sl.get<FirebaseFirestore>());
 
   bool isLogin = true;
 
@@ -81,17 +88,60 @@ class _AuthScreenState extends State<AuthScreen> {
                     SizedBox(height: 24),
                     isLogin
                         ? LoginForm(
-                            onPressed: () {},
-                            formKey: _formKey,
+                            onPressed: () async {
+                              if (_loginFormKey.currentState!.validate()) {
+                                try {
+                                  await authService.loginWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                } catch (e) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(e.toString()),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            formKey: _loginFormKey,
                             emailController: emailController,
                             passwordController: passwordController,
                           )
                         : RegisterForm(
-                            onPressed: () {},
-                            formKey: _formKey,
+                            onPressed: () async {
+                              if (_registerFormKey.currentState!.validate()) {
+                                if (passwordController.text != confirmPasswordController.text) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('Passwords do not match'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                try {
+                                  await authService.registerWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    username: usernameController.text,
+                                  );
+                                } catch (e) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(e.toString()),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            formKey: _registerFormKey,
                             usernameController: usernameController,
                             emailController: emailController,
                             passwordController: passwordController,
+                            confirmPasswordController: confirmPasswordController,
                           ),
                   ],
                 ),
