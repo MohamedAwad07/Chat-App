@@ -7,6 +7,7 @@ class CustomTextFormField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final TextEditingController controller;
+  final TextInputType? keyboardType;
   final String? Function(String?)? validator;
 
   const CustomTextFormField({
@@ -15,12 +16,14 @@ class CustomTextFormField extends StatelessWidget {
     required this.hintText,
     this.obscureText = false,
     required this.controller,
-    this.validator,
+    required this.validator,
+    required this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: keyboardType,
       controller: controller,
       validator: validator,
       obscureText: obscureText,

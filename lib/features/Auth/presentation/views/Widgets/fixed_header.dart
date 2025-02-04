@@ -7,53 +7,53 @@ class FixedHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.only(top: 15, bottom: 32),
-              child: Row(
-                spacing: 10,
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/Vector.svg',
-                    width: 25,
-                    height: 25,
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              top: 16,
+              bottom: 24,
+            ),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/images/Vector.svg',
+                  width: 20,
+                  height: 20,
+                ),
+                SizedBox(width: 8), // Added spacing manually since spacing property doesn't exist in Row
+                Text(
+                  "TESLA",
+                  style: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  Text(
-                    "TESLA",
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Text(
-              "Get Started now",
-              style: GoogleFonts.inter(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+          ),
+          Text(
+            "Get Started now",
+            style: GoogleFonts.inter(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-            SizedBox(height: 12),
-            Text(
-              "Create an account or log in to explore about our app",
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                color: Colors.white,
-              ),
+          ),
+          SizedBox(height: 8), // Small spacing before next text
+          Text(
+            "Create an account or log in to explore about our app",
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              color: Colors.white,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

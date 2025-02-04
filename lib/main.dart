@@ -11,7 +11,12 @@ void main() async {
   await dotenv.load(fileName: "assets/.env");
   ServiceLocator.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(DevicePreview(builder: (context) => const MyApp()));
+  runApp(
+    DevicePreview(
+      builder: (context) => const MyApp(),
+      enabled: true,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Chat App',
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
-      home:const AppLoader(),
+      home: const AppLoader(),
     );
   }
 }

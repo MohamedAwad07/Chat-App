@@ -29,6 +29,7 @@ class RegisterForm extends StatelessWidget {
         children: [
           // Username Field
           CustomTextFormField(
+            keyboardType: TextInputType.name,
             labelText: 'Username',
             hintText: 'Example123',
             controller: usernameController,
@@ -43,6 +44,7 @@ class RegisterForm extends StatelessWidget {
             },
           ),
           CustomTextFormField(
+            keyboardType: TextInputType.emailAddress,
             labelText: 'Email',
             hintText: 'example@gmail.com',
             controller: emailController,
@@ -57,6 +59,7 @@ class RegisterForm extends StatelessWidget {
             },
           ),
           CustomTextFormField(
+            keyboardType: TextInputType.visiblePassword,
             labelText: 'Password',
             hintText: 'Enter your password',
             obscureText: true,
@@ -72,6 +75,7 @@ class RegisterForm extends StatelessWidget {
             },
           ),
           CustomTextFormField(
+            keyboardType: TextInputType.visiblePassword,
             labelText: 'Confirm Password',
             hintText: 'Confirm your password',
             obscureText: true,

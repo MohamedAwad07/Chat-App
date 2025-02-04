@@ -17,8 +17,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final _loginFormKey = GlobalKey<FormState>(); // Separate key for login
-  final _registerFormKey = GlobalKey<FormState>(); // Separate key for registration
+  final _loginFormKey = GlobalKey<FormState>();
+  final _registerFormKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -30,7 +30,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF03242d),
+      // backgroundColor: Color(0xFF03242d),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -42,108 +42,111 @@ class _AuthScreenState extends State<AuthScreen> {
           children: [
             FixedHeader(),
             Expanded(
-              flex: 3,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
-                ),
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xfff5f6f9),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Row(
-                        children: [
-                          CustomTextButton(
-                            isWhite: isLogin,
-                            text: "Log In",
-                            onPressed: () {
-                              setState(() {
-                                isLogin = true;
-                              });
-                            },
-                          ),
-                          SizedBox(width: 10),
-                          CustomTextButton(
-                            isWhite: !isLogin,
-                            text: "Sign Up",
-                            onPressed: () {
-                              setState(() {
-                                isLogin = false;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
+              child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
                     ),
-                    SizedBox(height: 24),
-                    isLogin
-                        ? LoginForm(
-                            onPressed: () async {
-                              if (_loginFormKey.currentState!.validate()) {
-                                try {
-                                  await authService.loginWithEmailAndPassword(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                  );
-                                } catch (e) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text(e.toString()),
-                                    ),
-                                  );
+                  ),
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xfff5f6f9),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          children: [
+                            CustomTextButton(
+                              isWhite: isLogin,
+                              text: "Log In",
+                              onPressed: () {
+                                setState(() {
+                                  isLogin = true;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 10),
+                            CustomTextButton(
+                              isWhite: !isLogin,
+                              text: "Sign Up",
+                              onPressed: () {
+                                setState(() {
+                                  isLogin = false;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 24),
+
+                      // Toggle between LoginForm and RegisterForm
+                      isLogin
+                          ? LoginForm(
+                              onPressed: () async {
+                                if (_loginFormKey.currentState!.validate()) {
+                                  try {
+                                    await authService.loginWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                    );
+                                  } catch (e) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text(e.toString()),
+                                      ),
+                                    );
+                                  }
                                 }
-                              }
-                            },
-                            formKey: _loginFormKey,
-                            emailController: emailController,
-                            passwordController: passwordController,
-                          )
-                        : RegisterForm(
-                            onPressed: () async {
-                              if (_registerFormKey.currentState!.validate()) {
-                                if (passwordController.text != confirmPasswordController.text) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text('Passwords do not match'),
-                                    ),
-                                  );
-                                  return;
+                              },
+                              formKey: _loginFormKey,
+                              emailController: emailController,
+                              passwordController: passwordController,
+                            )
+                          : RegisterForm(
+                              onPressed: () async {
+                                if (_registerFormKey.currentState!.validate()) {
+                                  if (passwordController.text != confirmPasswordController.text) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text('Passwords do not match'),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  try {
+                                    await authService.registerWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      username: usernameController.text,
+                                    );
+                                  } catch (e) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text(e.toString()),
+                                      ),
+                                    );
+                                  }
                                 }
-                                try {
-                                  await authService.registerWithEmailAndPassword(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    username: usernameController.text,
-                                  );
-                                } catch (e) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text(e.toString()),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            formKey: _registerFormKey,
-                            usernameController: usernameController,
-                            emailController: emailController,
-                            passwordController: passwordController,
-                            confirmPasswordController: confirmPasswordController,
-                          ),
-                  ],
+                              },
+                              formKey: _registerFormKey,
+                              usernameController: usernameController,
+                              emailController: emailController,
+                              passwordController: passwordController,
+                              confirmPasswordController: confirmPasswordController,
+                            ),
+                    ],
+                  ),
                 ),
               ),
             ),

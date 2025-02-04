@@ -33,6 +33,7 @@ class LoginForm extends StatelessWidget {
         children: [
           // Email Input Field with Validation
           CustomTextFormField(
+            keyboardType: TextInputType.emailAddress,
             labelText: 'Email',
             hintText: 'example@gmail.com',
             controller: emailController,
@@ -49,6 +50,7 @@ class LoginForm extends StatelessWidget {
           ),
           // Password Input Field with Validation
           CustomTextFormField(
+            keyboardType: TextInputType.visiblePassword,
             labelText: 'Password',
             hintText: 'Enter your password',
             obscureText: true,
@@ -147,7 +149,7 @@ class LoginForm extends StatelessWidget {
             children: [
               CustomLoginOptions(
                 text: 'Continue with Google',
-                imagePath: 'assets/images/Google.svg',
+                imagePath: 'assets/images/google.svg',
                 onPressed: () async {
                   {
                     await authService.loginWithGoogle();
