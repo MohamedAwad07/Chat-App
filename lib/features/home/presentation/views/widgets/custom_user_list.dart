@@ -1,6 +1,5 @@
 import 'package:chat_app/core/service%20locator/service_locator.dart';
 import 'package:chat_app/features/home/presentation/views/widgets/cusom_user_tile.dart';
-import 'package:chat_app/features/home/presentation/views/widgets/skeletonizer_users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class BuildUserList extends StatelessWidget {
       stream: sl.get<FirebaseFirestore>().collection('users').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SkeletonizerUserList();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Center(child: Text(snapshot.error.toString()));
         }

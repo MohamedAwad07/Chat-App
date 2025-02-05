@@ -13,6 +13,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/.env");
   ServiceLocator.init();
+  await _initializeApp();
+}
+
+Future<void> _initializeApp() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,
@@ -22,12 +26,6 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
-  runApp(
-    DevicePreview(
-      builder: (context) => const MyApp(),
-      enabled: true,
-    ),
-  );
 }
 
 void updateUserStatus(String userId, bool isOnline) {
@@ -78,7 +76,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     auth.authStateChanges().listen((user) {
       if (user != null) {
         updateUserStatus(user.uid, true);
-      } else {
       }
     });
   }

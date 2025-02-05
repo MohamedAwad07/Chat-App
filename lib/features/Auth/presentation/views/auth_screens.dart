@@ -1,4 +1,5 @@
 import 'package:chat_app/core/service%20locator/service_locator.dart';
+import 'package:chat_app/core/utils/app_assets.dart';
 import 'package:chat_app/features/Auth/data/repos/repos.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,7 +35,7 @@ class _AuthScreenState extends State<AuthScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/login-background.jpeg'),
+            image: AssetImage(Assets.assetsImagesLoginBackground),
             alignment: Alignment.topCenter,
           ),
         ),

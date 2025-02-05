@@ -1,3 +1,4 @@
+import 'package:chat_app/core/utils/app_assets.dart';
 import 'package:chat_app/features/home/presentation/views/widgets/build_message_list.dart';
 import 'package:chat_app/core/service%20locator/service_locator.dart';
 import 'package:chat_app/core/utils/app_colors.dart';
@@ -63,7 +64,7 @@ class ChatScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/chatWallpaper.jpeg'),
+                  image: AssetImage(Assets.assetsImagesChatWallpaper),
                   fit: BoxFit.cover,
                 ),
               ),

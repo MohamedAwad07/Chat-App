@@ -74,7 +74,6 @@ class _AppLoaderState extends State<AppLoader> with SingleTickerProviderStateMix
                 if (data == null) {
                   return const SizedBox.shrink();
                 }
-
                 return AuthGate();
               },
             ),
@@ -84,7 +83,6 @@ class _AppLoaderState extends State<AppLoader> with SingleTickerProviderStateMix
                 if (isSplashScreenVisible) {
                   return splashScreen!;
                 }
-
                 return const SizedBox.shrink();
               },
               child: WiseSplashScreen(controller: _controller),
