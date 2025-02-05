@@ -1,9 +1,12 @@
 import 'package:chat_app/core/service%20locator/service_locator.dart';
+import 'package:chat_app/core/utils/app_colors.dart';
 import 'package:chat_app/features/Auth/data/repos/repos.dart';
+import 'package:chat_app/features/home/presentation/views/widgets/custom_user_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -16,12 +19,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final TextStyle boldTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 24);
   final List<SampleListModel> drawerItems = [];
   final DrawerStateManager drawerState = DrawerStateManager();
+  final User? _currentUserId = sl.get<FirebaseAuth>().currentUser;
 
   @override
   void initState() {
     super.initState();
     _initializeDrawerItems();
-    _initializeDrawer();
+    //_initializeDrawer();
   }
 
   void _initializeDrawerItems() {
@@ -29,12 +33,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
       SampleListModel(
         title: "Home",
         icon: Icons.home,
-        launchWidget: Center(child: Text("Home View", style: boldTextStyle)),
+        launchWidget: BuildUserList(),
       ),
       SampleListModel(
-        title: "Profile",
+        title: "Chats",
         icon: Icons.account_box_rounded,
-        launchWidget: Center(child: Text("Profile View", style: boldTextStyle)),
+        launchWidget: Center(child: Text("Chat View", style: boldTextStyle)),
       ),
       SampleListModel(
         title: "Notification",
@@ -63,21 +67,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            _buildDrawerContent(),
-            _buildMainContent(),
-          ],
-        ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          _buildDrawerContent(),
+          _buildMainContent(),
+        ],
       ),
     );
   }
 
   Widget _buildDrawerContent() {
     return Container(
-      color: AppColors.drawerBackground,
+      color: AppColor.drawerBackground,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,8 +105,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Mohamed Awad', style: TextStyle(color: Colors.white, fontSize: 20)),
-              Text('Software Engineer', style: TextStyle(color: Colors.white54, fontSize: 16)),
+              Text(_currentUserId?.displayName ?? "John Doe", style: TextStyle(color: Colors.white, fontSize: 20)),
+              Text(_currentUserId?.email ?? "Manga@example.com", style: TextStyle(color: Colors.white54, fontSize: 16)),
             ],
           ),
         ],
@@ -161,45 +163,36 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   Widget _buildMainContent() {
-    return GestureDetector(
-      onTap: () {
-        drawerState.closeDrawer();
-        setState(() {});
-      },
-      child: AnimatedContainer(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: drawerState.isOpen ? BorderRadius.circular(16) : BorderRadius.circular(0),
-        ),
-        duration: Duration(milliseconds: 200),
-        transform: Matrix4.translationValues(drawerState.xOffset, drawerState.yOffset, 0)..scale(drawerState.scaleFactor),
-        child: SafeArea(
-          child: Container(
-            alignment: Alignment.center,
-            color: AppStore().scaffoldBackgroundColor,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                _buildAppBar(),
-                Expanded(
-                  child: _buildSelectedContent(),
-                ),
-              ],
-            ),
+    return AnimatedContainer(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: drawerState.isOpen ? BorderRadius.circular(16) : BorderRadius.circular(0),
+      ),
+      duration: Duration(milliseconds: 200),
+      transform: Matrix4.translationValues(drawerState.xOffset, drawerState.yOffset, 0)..scale(drawerState.scaleFactor),
+      child: SafeArea(
+        child: Container(
+          alignment: Alignment.center,
+          color: AppStore().scaffoldBackgroundColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              _buildAppBar(),
+              Expanded(
+                child: _buildSelectedContent(),
+              ),
+            ],
           ),
         ),
       ),
-      onPanUpdate: (_) {
-        drawerState.closeDrawer();
-        setState(() {});
-      },
     );
   }
 
   Widget _buildAppBar() {
     return Row(
       children: [
+        // Icon at the start
         IconButton(
           icon: Icon(drawerState.isOpen ? Icons.arrow_back : Icons.menu, size: 24),
           onPressed: () {
@@ -211,8 +204,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
             setState(() {});
           },
         ),
-        SizedBox(width: 8),
-        Text(drawerItems[drawerState.selectedIndex].title ?? "View", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        Spacer(),
+        Text(
+          drawerItems[drawerState.selectedIndex].title ?? "View",
+          style: GoogleFonts.pacifico(
+            fontSize: 20,
+            letterSpacing: 1.2,
+          ),
+        ),
+        // Spacer to balance the Row
+        Spacer(),
+        SizedBox(width: 48),
       ],
     );
   }
@@ -225,20 +227,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
         children: [
           drawerItems[drawerState.selectedIndex].launchWidget ?? SizedBox(),
           SizedBox(height: 16),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(AppStore().textPrimaryColor!),
-              padding: WidgetStateProperty.all(const EdgeInsets.only(left: 15, right: 15)),
-              shadowColor: WidgetStateProperty.all(Colors.transparent),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Go Back',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ),
         ],
       ),
     );
@@ -257,7 +245,7 @@ class DrawerStateManager {
     yOffset = 80;
     scaleFactor = 0.8;
     isOpen = true;
-    _setStatusBarColor(AppColors.drawerBackground);
+    _setStatusBarColor(AppColor.drawerBackground);
   }
 
   void closeDrawer() {
@@ -295,8 +283,8 @@ class SampleListModel {
   SampleListModel({this.title, this.icon, this.launchWidget});
 }
 
-class AppColors {
-  static const Color drawerBackground = Color(0xff335a5a);
+class AppColor {
+  static Color drawerBackground = AppColors.primary;
 }
 
 class AppStore {
@@ -307,6 +295,6 @@ class AppStore {
   AppStore() {
     textPrimaryColor = Color(0xFF212121);
     scaffoldBackground = Color(0xFFEBF2F7);
-    scaffoldBackgroundColor = Color(0xFFEFEFEF);
+    scaffoldBackgroundColor = Colors.white;
   }
 }

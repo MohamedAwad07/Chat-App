@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui';
+import 'package:chat_app/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 const _animationDuration = 1500;
@@ -85,12 +86,13 @@ class _Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Color(0xFF9FE870),
+      color: AppColors.primaryLight,
       child: Center(
         child: Image.asset(
-          'assets/images/logo.png',
+          'assets/images/logo2.png',
           width: 80,
           height: 80,
+          color: Colors.white,
         ),
       ),
     );
@@ -218,7 +220,7 @@ class _TrackPainter extends CustomPainter {
 
     canvas.drawPath(
       track.path,
-      Paint()..color = const Color(0xFF1E330A),
+      Paint()..color = AppColors.primaryLight,
     );
   }
 
@@ -320,7 +322,7 @@ class _CirclePainter extends CustomPainter {
 
     final circlePaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = const Color.fromARGB(255, 38, 97, 1);
+      ..color = AppColors.primaryDark;
 
     canvas.drawCircle(
       Offset(side * 0.5, side * 0.5),
@@ -337,7 +339,7 @@ class _CirclePainter extends CustomPainter {
 
     final arrowPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..color =  const Color.fromARGB(255, 180, 255, 133)
+      ..color = Colors.white
       ..strokeJoin = StrokeJoin.round
       ..strokeWidth = side / 15 - 2.8;
 

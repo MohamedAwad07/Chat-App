@@ -43,7 +43,8 @@ class AuthServiceImpl implements AuthService {
       await firestore.collection('users').doc(userId).set({
         'username': username,
         'email': email,
-        'createdAt': Timestamp.now().millisecondsSinceEpoch,
+        'status': 'online',
+        'uid': userId,
       });
 
       log("User registered successfully!");
@@ -63,6 +64,9 @@ class AuthServiceImpl implements AuthService {
         email: email,
         password: password,
       );
+      await firestore.collection('users').doc(userCredential.user!.uid).update({
+      'status': 'online',
+    });
       log("User logged in successfully!");
       return userCredential;
     } on FirebaseAuthException catch (e) {
@@ -96,8 +100,20 @@ class AuthServiceImpl implements AuthService {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      log('Google sign-in successful');
-      await auth.signInWithCredential(credential);
+      
+      UserCredential userCredential = await auth.signInWithCredential(credential);
+      User? firebaseUser = userCredential.user;
+
+      if (firebaseUser != null) {
+        await firestore.collection('users').doc(firebaseUser.uid).set({
+          'username': firebaseUser.displayName,
+          'email': firebaseUser.email,
+          'status': 'online',
+          'uid': firebaseUser.uid,
+        });
+
+        log('Google sign-in successful and user saved to Firestore');
+      }
     } else {
       log('Google sign-in failed');
     }
@@ -106,6 +122,10 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<void> logout() async {
     log('User logged out');
+    String id = auth.currentUser!.uid;
+    await firestore.collection('users').doc(id).update({
+      'status': 'offline',
+    });
     return await auth.signOut();
   }
 

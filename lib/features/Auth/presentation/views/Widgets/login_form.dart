@@ -160,9 +160,13 @@ class LoginForm extends StatelessWidget {
               CustomLoginOptions(
                 text: 'Continue with Facebook',
                 imagePath: 'assets/images/Facebook.svg',
-                onPressed: () async {
+                onPressed: () {
                   {
-                    await authService.loginWithFacebook();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Coming Soon"),
+                      ),
+                    );
                   }
                 },
               ),

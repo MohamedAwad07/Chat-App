@@ -38,7 +38,7 @@ class FixedHeader extends StatelessWidget {
             ),
           ),
           Text(
-            "Get Started now",
+            "Get Started",
             style: GoogleFonts.inter(
               fontSize: 30,
               fontWeight: FontWeight.bold,
