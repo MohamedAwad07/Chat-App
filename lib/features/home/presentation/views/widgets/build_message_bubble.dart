@@ -8,10 +8,21 @@ class BuildMessageBubble extends StatelessWidget {
   final QueryDocumentSnapshot<Object?>message;
   final bool isSender;
 
+  String _formatTime(DateTime dateTime) {
+  int hour = dateTime.hour % 12; 
+  hour = hour == 0 ? 12 : hour;
+
+  String period = dateTime.hour >= 12 ? 'PM' : 'AM';
+
+  // Return formatted time
+  return '$hour:${dateTime.minute.toString().padLeft(2, '0')} $period';
+}
   @override
   Widget build(BuildContext context) {
     final timestamp = message['timestamp'] as Timestamp?;
-    final timeString = timestamp != null ? '${timestamp.toDate().hour}:${timestamp.toDate().minute.toString().padLeft(2, '0')}' : '';
+    final timeString = timestamp != null
+    ? _formatTime(timestamp.toDate())
+    : '';
     return Column(
       crossAxisAlignment: isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [

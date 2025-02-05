@@ -1,4 +1,5 @@
 import 'package:chat_app/core/service%20locator/service_locator.dart';
+import 'package:chat_app/core/utils/app_assets.dart';
 import 'package:chat_app/core/utils/app_colors.dart';
 import 'package:chat_app/features/Auth/data/repos/repos.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_action_button.dart';
@@ -149,7 +150,7 @@ class LoginForm extends StatelessWidget {
             children: [
               CustomLoginOptions(
                 text: 'Continue with Google',
-                imagePath: 'assets/images/google.svg',
+                imagePath: Assets.assetsImagesGoogle,
                 onPressed: () async {
                   {
                     await authService.loginWithGoogle();
@@ -159,7 +160,7 @@ class LoginForm extends StatelessWidget {
               const SizedBox(height: 8),
               CustomLoginOptions(
                 text: 'Continue with Facebook',
-                imagePath: 'assets/images/Facebook.svg',
+                imagePath: Assets.assetsImagesFacebook,
                 onPressed: () {
                   {
                     ScaffoldMessenger.of(context).showSnackBar(

@@ -1,3 +1,4 @@
+import 'package:chat_app/core/utils/app_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,7 +22,7 @@ class FixedHeader extends StatelessWidget {
             child: Row(
               children: [
                 SvgPicture.asset(
-                  'assets/images/Vector.svg',
+                  Assets.assetsImagesVector,
                   width: 20,
                   height: 20,
                 ),

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:ui';
+import 'package:chat_app/core/utils/app_assets.dart';
 import 'package:chat_app/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -89,7 +90,7 @@ class _Background extends StatelessWidget {
       color: AppColors.primaryLight,
       child: Center(
         child: Image.asset(
-          'assets/images/logo2.png',
+          Assets.assetsImagesLogo2,
           width: 80,
           height: 80,
           color: Colors.white,
@@ -182,7 +183,7 @@ class _ForegroundState extends State<_Foreground> {
                 );
               },
               child: Image.asset(
-                'assets/images/background.jpeg',
+                Assets.assetsImagesBackground,
                 fit: BoxFit.cover,
               ),
             ),
