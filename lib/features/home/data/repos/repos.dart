@@ -56,7 +56,7 @@ class ChatServiceImpl implements ChatService {
     ];
     ids.sort();
     String chatRoomId = ids.join('-');
-    return firestore.collection('chat_rooms').doc(chatRoomId).collection('messages').orderBy('timestamp' , descending: false).snapshots();
+    return firestore.collection('chat_rooms').doc(chatRoomId).collection('messages').orderBy('timestamp' , descending: true).snapshots();
   }
 
   @override

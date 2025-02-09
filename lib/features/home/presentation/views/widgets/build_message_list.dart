@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class BuildMessagesList extends StatelessWidget {
-  const BuildMessagesList({super.key, this.messageStream, required this.auth});
+  const BuildMessagesList({super.key, this.messageStream, required this.auth,required this.controller});
   final Stream<QuerySnapshot<Object?>>? messageStream;
   final FirebaseAuth auth;
-  
+  final ScrollController controller;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -27,6 +27,8 @@ class BuildMessagesList extends StatelessWidget {
             return const Center(child: Text('No messages yet'));
           }
           return ListView.builder(
+            reverse: true,
+            controller: controller,
             itemCount: messages.length,
             itemBuilder: (context, index) {
               final message = messages[index];

@@ -31,11 +31,14 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(0xFF03242d),
+      //backgroundColor: Color(0xFF03242d),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(Assets.assetsImagesLoginBackground),
+            image: AssetImage(
+              Assets.assetsImagesLoginBackground,
+            ),
+            fit: BoxFit.cover,
             alignment: Alignment.topCenter,
           ),
         ),
@@ -44,13 +47,12 @@ class _AuthScreenState extends State<AuthScreen> {
             FixedHeader(),
             Expanded(
               child: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25),
                     ),
                   ),
                   padding: const EdgeInsets.all(24),

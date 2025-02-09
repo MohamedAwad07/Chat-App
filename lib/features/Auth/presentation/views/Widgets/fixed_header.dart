@@ -26,7 +26,7 @@ class FixedHeader extends StatelessWidget {
                   width: 20,
                   height: 20,
                 ),
-                SizedBox(width: 8), // Added spacing manually since spacing property doesn't exist in Row
+                SizedBox(width: 8),
                 Text(
                   "TESLA",
                   style: GoogleFonts.inter(
@@ -46,7 +46,7 @@ class FixedHeader extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 8), // Small spacing before next text
+          SizedBox(height: 8),
           Text(
             "Create an account or log in to explore about our app",
             style: GoogleFonts.inter(

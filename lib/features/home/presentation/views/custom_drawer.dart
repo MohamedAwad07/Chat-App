@@ -37,7 +37,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
       SampleListModel(
         title: "Chats",
-        icon: Icons.account_box_rounded,
+        icon: Icons.message_outlined,
         launchWidget: Center(child: Text("Chat View", style: boldTextStyle)),
       ),
       SampleListModel(
@@ -52,13 +52,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     ]);
   }
-
-  void _initializeDrawer() async {
-    await Future.delayed(Duration(seconds: 1));
-    drawerState.openDrawer();
-    setState(() {});
-  }
-
   @override
   void dispose() {
     drawerState.closeDrawer();

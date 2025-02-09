@@ -129,11 +129,11 @@ class LoginForm extends StatelessWidget {
                   horizontal: 8.0,
                 ),
                 child: Text(
-                  'Or',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
+                  'or continue with',
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey,
                     fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -145,31 +145,43 @@ class LoginForm extends StatelessWidget {
               ),
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomLoginOptions(
-                text: 'Continue with Google',
-                imagePath: Assets.assetsImagesGoogle,
-                onPressed: () async {
-                  {
-                    await authService.loginWithGoogle();
-                  }
-                },
+              Expanded(
+                flex: 2,
+                child: CustomLoginOptions(
+                  text: 'Continue with Google',
+                  imagePath: Assets.assetsImagesGoogle,
+                  onPressed: () async {
+                    {
+                      await authService.loginWithGoogle();
+                    }
+                  },
+                ),
               ),
-              const SizedBox(height: 8),
-              CustomLoginOptions(
-                text: 'Continue with Facebook',
-                imagePath: Assets.assetsImagesFacebook,
-                onPressed: () {
-                  {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Coming Soon"),
-                      ),
-                    );
-                  }
-                },
+              SizedBox(
+                height: 24,
+                child: VerticalDivider(
+                  color: Colors.black,
+                  thickness: 2,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: CustomLoginOptions(
+                  text: 'Continue with Facebook',
+                  imagePath: Assets.assetsImagesFacebook,
+                  onPressed: () {
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Coming Soon"),
+                        ),
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           ),

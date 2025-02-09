@@ -7,14 +7,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final String currentUserName;
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
   final String receiverId;
-  final TextEditingController _messageController = TextEditingController();
 
-  ChatScreen({
+  const ChatScreen({
     super.key,
     required this.currentUserName,
     required this.auth,
@@ -22,9 +21,34 @@ class ChatScreen extends StatelessWidget {
     required this.receiverId,
   });
 
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _messageController = TextEditingController();
+
+  final controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
-      await sl<ChatService>().sendMessage(receiverId, _messageController.text);
+      await sl<ChatService>().sendMessage(widget.receiverId, _messageController.text);
+      controller.animateTo(
+        0,
+        duration: const Duration(seconds: 1),
+        curve: Curves.fastOutSlowIn,
+      );
       _messageController.clear();
     }
   }
@@ -48,7 +72,7 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
             Text(
-              currentUserName,
+              widget.currentUserName,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -69,8 +93,9 @@ class ChatScreen extends StatelessWidget {
                 ),
               ),
               child: BuildMessagesList(
-                auth: auth,
-                messageStream: sl<ChatService>().getMessages(auth.currentUser!.uid, receiverId),
+                controller: controller,
+                auth: widget.auth,
+                messageStream: sl<ChatService>().getMessages(widget.auth.currentUser!.uid, widget.receiverId),
               ),
             ),
           ),

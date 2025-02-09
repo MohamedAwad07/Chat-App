@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomLoginOptions extends StatelessWidget {
   const CustomLoginOptions({super.key, required this.onPressed, required this.text, required this.imagePath});
@@ -9,7 +8,7 @@ class CustomLoginOptions extends StatelessWidget {
   final String imagePath;
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return IconButton(
       style: TextButton.styleFrom(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
@@ -20,24 +19,10 @@ class CustomLoginOptions extends StatelessWidget {
         ),
       ),
       onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 10,
-        children: [
-          SvgPicture.asset(
+      icon: SvgPicture.asset(
             imagePath,
             width: 35,
           ),
-          Text(
-            text,
-            style: GoogleFonts.inter(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
