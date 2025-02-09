@@ -59,3 +59,5 @@ class ResetPasswordError extends AuthStates {}
 class TogglePasswordVisibility extends AuthStates {}
 
 class ToggleCheckBoxState extends AuthStates {}
+
+class LogoutSuccess extends AuthStates {}

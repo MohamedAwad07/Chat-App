@@ -11,7 +11,9 @@ class AuthCubit extends Cubit<AuthStates> {
   final AuthService authService;
   AuthCubit({required this.authService}) : super(AuthInitial());
 
+  CurrentUserInfo? currentUser;
   static AuthCubit get(context) => BlocProvider.of(context);
+  
   void checkAuthState() {
     emit(AuthLoading());
     FirebaseAuth.instance.authStateChanges().listen((firebaseUser) async {
@@ -20,9 +22,9 @@ class AuthCubit extends Cubit<AuthStates> {
 
         String username = userDoc['username'];
 
-        final CurrentUserInfo currentUser = CurrentUserInfo.fromJson(firebaseUser, username: username);
+        currentUser = CurrentUserInfo.fromJson(firebaseUser, username: username);
 
-        emit(Authenticated(user: currentUser));
+        emit(Authenticated(user: currentUser!));
       } else {
         emit(Unauthenticated(errorMessage: 'User is not logged in'));
       }
@@ -35,15 +37,16 @@ class AuthCubit extends Cubit<AuthStates> {
 
       final response = await authService.loginWithGoogle();
       response.fold(
-        (failure) => emit(
-          LoginWithGoogleError(
-            errorMessage: failure.toString(),
-          ),
-        ),
-        (user) => emit(
+          (failure) => emit(
+                LoginWithGoogleError(
+                  errorMessage: failure.toString(),
+                ),
+              ), (user) {
+        currentUser = user;
+        emit(
           LoginWithGoogleSuccess(userInfo: user),
-        ),
-      );
+        );
+      });
     } catch (e) {
       emit(
         LoginWithGoogleError(
@@ -62,10 +65,12 @@ class AuthCubit extends Cubit<AuthStates> {
                 LoginWithEmailAndPasswordError(
                   errorMessage: failure.toString(),
                 ),
-              ),
-          (user) => emit(
-                LoginWithEmailAndPasswordSuccess(userInfo: user),
-              ));
+              ), (user) {
+        currentUser = user;
+        emit(
+          LoginWithEmailAndPasswordSuccess(userInfo: user),
+        );
+      });
     } catch (e) {
       emit(
         LoginWithGoogleError(
@@ -83,10 +88,12 @@ class AuthCubit extends Cubit<AuthStates> {
               RegisterNewUserError(
                 errorMessage: failure.toString(),
               ),
-            ),
-        (user) => emit(
-              RegisterNewUserSuccess(userInfo: user),
-            ));
+            ), (user) {
+      currentUser = user;
+      emit(
+        RegisterNewUserSuccess(userInfo: user),
+      );
+    });
   }
 
   Future<void> resetPassword({required String email}) async {
@@ -113,5 +120,10 @@ class AuthCubit extends Cubit<AuthStates> {
   void changeCheckBox() {
     isChecked = !isChecked;
     emit(ToggleCheckBoxState());
+  }
+
+  Future<void> logout() async {
+    await authService.logout();
+    emit(LogoutSuccess());
   }
 }

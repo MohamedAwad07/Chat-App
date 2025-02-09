@@ -9,13 +9,10 @@ final sl = GetIt.instance;
 
 class ServiceLocator {
   static void init() {
-    // Register Singleton Instances
     _registerSingletons();
 
-    // Register Cubits
     _registerCubits();
 
-    // Register Core Dependencies
     _registerCore();
   }
 

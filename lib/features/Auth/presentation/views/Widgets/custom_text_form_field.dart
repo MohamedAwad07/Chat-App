@@ -2,6 +2,7 @@ import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class CustomTextFormField extends StatelessWidget {
   final String labelText;
   final String hintText;

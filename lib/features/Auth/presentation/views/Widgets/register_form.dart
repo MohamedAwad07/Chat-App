@@ -1,9 +1,7 @@
-import 'package:chat_app/core/service%20locator/service_locator.dart';
 import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
 import 'package:chat_app/features/Auth/presentation/controller/auth_states.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_action_button.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_text_form_field.dart';
-import 'package:chat_app/features/home/presentation/views/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

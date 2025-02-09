@@ -1,6 +1,6 @@
 import 'package:chat_app/core/service%20locator/service_locator.dart';
 import 'package:chat_app/core/utils/app_colors.dart';
-import 'package:chat_app/features/Auth/data/repos/repos.dart';
+import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
 import 'package:chat_app/features/home/presentation/views/widgets/custom_user_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +19,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final TextStyle boldTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 24);
   final List<SampleListModel> drawerItems = [];
   final DrawerStateManager drawerState = DrawerStateManager();
-  final User? _currentUserId = sl.get<FirebaseAuth>().currentUser;
 
   @override
   void initState() {
@@ -52,6 +51,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     ]);
   }
+
   @override
   void dispose() {
     drawerState.closeDrawer();
@@ -87,7 +87,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  Widget _buildUserProfile() {
+   Widget _buildUserProfile() {
     return Container(
       padding: EdgeInsets.only(left: 16, top: 24),
       child: Row(
@@ -98,15 +98,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(_currentUserId?.displayName ?? "John Doe", style: TextStyle(color: Colors.white, fontSize: 20)),
-              Text(_currentUserId?.email ?? "Manga@example.com", style: TextStyle(color: Colors.white54, fontSize: 16)),
+              Text(AuthCubit.get(context).currentUser?.username ?? "User Name", style: TextStyle(color: Colors.white, fontSize: 20)),
+              Text(AuthCubit.get(context).currentUser?.email ?? "Manga@example.com", style: TextStyle(color: Colors.white54, fontSize: 16)),
             ],
           ),
         ],
       ),
     );
   }
-
   Widget _buildDrawerItem(SampleListModel item) {
     return ListTile(
       title: Text(
@@ -139,9 +138,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ],
         ),
         onTap: () async {
-          final authService = AuthServiceImpl(auth: sl.get<FirebaseAuth>(), firestore: sl.get<FirebaseFirestore>());
           try {
-            await authService.logout();
+            sl<AuthCubit>().logout();
           } catch (e) {
             showDialog(
               context: context,
@@ -185,7 +183,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget _buildAppBar() {
     return Row(
       children: [
-        // Icon at the start
         IconButton(
           icon: Icon(drawerState.isOpen ? Icons.arrow_back : Icons.menu, size: 24),
           onPressed: () {

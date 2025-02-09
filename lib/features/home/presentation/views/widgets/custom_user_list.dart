@@ -1,14 +1,13 @@
+import 'dart:developer';
 import 'package:chat_app/core/service%20locator/service_locator.dart';
+import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
 import 'package:chat_app/features/home/presentation/views/widgets/cusom_user_tile.dart';
 import 'package:chat_app/features/home/presentation/views/widgets/skeletonizer_users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class BuildUserList extends StatelessWidget {
-  final String? _currentUserId = sl.get<FirebaseAuth>().currentUser?.uid;
-
-  BuildUserList({super.key});
+  const BuildUserList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +21,7 @@ class BuildUserList extends StatelessWidget {
         }
         final users = snapshot.data!.docs;
         if (users.length == 1) {
+          log("No users found!");
           return const _NoUsersFoundMessage();
         }
         return Expanded(
@@ -36,7 +36,7 @@ class BuildUserList extends StatelessWidget {
                 final username = user['username'] ?? 'Unknown';
                 final status = user['status'] ?? 'offline';
 
-                if (userId == _currentUserId) return const SizedBox.shrink();
+                if (userId == AuthCubit.get(context).currentUser?.uid) return const SizedBox.shrink();
 
                 return UserTile(
                   username: username,
