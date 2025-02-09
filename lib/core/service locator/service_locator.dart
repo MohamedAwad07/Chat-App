@@ -1,4 +1,5 @@
 import 'package:chat_app/features/Auth/data/repos/repos.dart';
+import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
 import 'package:chat_app/features/home/data/repos/repos.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +30,9 @@ class ServiceLocator {
         ));
   }
 
-  static void _registerCubits() {}
+  static void _registerCubits() {
+    sl.registerFactory<AuthCubit>(() => AuthCubit(authService: sl<AuthService>()));
+  }
 
   static void _registerCore() {
     sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);

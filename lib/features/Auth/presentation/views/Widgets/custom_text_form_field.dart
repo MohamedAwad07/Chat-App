@@ -1,16 +1,17 @@
+import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  // Parameters for the TextFormField
   final String labelText;
   final String hintText;
   final bool obscureText;
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  IconData? suffixIcon;
 
-  const CustomTextFormField({
+  CustomTextFormField({
     super.key,
     required this.labelText,
     required this.hintText,
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     required this.validator,
     required this.keyboardType,
+    this.suffixIcon,
   });
 
   @override
@@ -28,14 +30,12 @@ class CustomTextFormField extends StatelessWidget {
       validator: validator,
       obscureText: obscureText,
       decoration: InputDecoration(
-        suffixIcon: obscureText
-            ? IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.visibility_off,
-                ),
-              )
-            : null,
+        suffixIcon: IconButton(
+          icon: Icon(suffixIcon),
+          onPressed: () {
+            AuthCubit.get(context).changePasswordVisibility();
+          },
+        ),
         labelText: labelText,
         hintText: hintText,
         hintStyle: GoogleFonts.inter(

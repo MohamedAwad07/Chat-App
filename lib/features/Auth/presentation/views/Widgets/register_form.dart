@@ -1,16 +1,20 @@
+import 'package:chat_app/core/service%20locator/service_locator.dart';
+import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
+import 'package:chat_app/features/Auth/presentation/controller/auth_states.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_action_button.dart';
 import 'package:chat_app/features/Auth/presentation/views/Widgets/custom_text_form_field.dart';
+import 'package:chat_app/features/home/presentation/views/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({
     super.key,
+    required this.usernameController,
     required this.emailController,
     required this.passwordController,
-    required this.formKey,
-    required this.onPressed,
-    required this.usernameController,
     required this.confirmPasswordController,
+    required this.formKey,
   });
 
   final GlobalKey<FormState> formKey;
@@ -18,91 +22,114 @@ class RegisterForm extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
-  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        spacing: 16,
-        children: [
-          // Username Field
-          CustomTextFormField(
-            keyboardType: TextInputType.name,
-            labelText: 'Username',
-            hintText: 'Example123',
-            controller: usernameController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a username';
-              }
-              if (value.length < 3) {
-                return 'Username must be at least 3 characters';
-              }
-              return null;
-            },
+    return BlocConsumer<AuthCubit, AuthStates>(
+      listener: (context, state) {
+        if (state is Unauthenticated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                state.errorMessage,
+              ),
+            ),
+          );
+        } else if (state is RegisterNewUserError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                state.errorMessage,
+              ),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Form(
+          key: formKey,
+          child: Column(
+            spacing: 16,
+            children: [
+              CustomTextFormField(
+                keyboardType: TextInputType.name,
+                labelText: 'Username',
+                hintText: 'Enter your username',
+                controller: usernameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Username cannot be empty';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextFormField(
+                keyboardType: TextInputType.emailAddress,
+                labelText: 'Email',
+                hintText: 'example@gmail.com',
+                controller: emailController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email cannot be empty';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextFormField(
+                keyboardType: TextInputType.visiblePassword,
+                labelText: 'Password',
+                hintText: 'Enter your password',
+                suffixIcon: AuthCubit.get(context).suffix,
+                obscureText: AuthCubit.get(context).isPassword,
+                controller: passwordController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Password cannot be empty';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters long';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextFormField(
+                keyboardType: TextInputType.visiblePassword,
+                labelText: 'Confirm Password',
+                hintText: 'Re-enter your password',
+                suffixIcon: AuthCubit.get(context).suffix,
+                obscureText: AuthCubit.get(context).isPassword,
+                controller: confirmPasswordController,
+                validator: (value) {
+                  if (value != passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 8),
+              state is RegisterNewUserLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : CustomActionButton(
+                      text: "Register",
+                      onPressed: state is RegisterNewUserLoading
+                          ? null
+                          : () {
+                              if (formKey.currentState!.validate()) {
+                                AuthCubit.get(context).register(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  username: usernameController.text,
+                                );
+                              }
+                            },
+                    ),
+              SizedBox(height: 1),
+            ],
           ),
-          CustomTextFormField(
-            keyboardType: TextInputType.emailAddress,
-            labelText: 'Email',
-            hintText: 'example@gmail.com',
-            controller: emailController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              if (!value.contains('@')) {
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
-          ),
-          CustomTextFormField(
-            keyboardType: TextInputType.visiblePassword,
-            labelText: 'Password',
-            hintText: 'Enter your password',
-            obscureText: true,
-            controller: passwordController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a password';
-              }
-              if (value.length < 6) {
-                return 'Password must be at least 6 characters';
-              }
-              return null;
-            },
-          ),
-          CustomTextFormField(
-            keyboardType: TextInputType.visiblePassword,
-            labelText: 'Confirm Password',
-            hintText: 'Confirm your password',
-            obscureText: true,
-            controller: confirmPasswordController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please confirm your password';
-              }
-              if (value != passwordController.text) {
-                return 'Passwords do not match';
-              }
-              return null;
-            },
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          CustomActionButton(
-            text: "Register",
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                onPressed();
-              }
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
