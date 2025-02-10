@@ -16,12 +16,13 @@ void main() async {
   await dotenv.load(fileName: "assets/.env");
   ServiceLocator.init();
  Bloc.observer = Observe();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,
     overlays: [],
   );
-
+ 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));

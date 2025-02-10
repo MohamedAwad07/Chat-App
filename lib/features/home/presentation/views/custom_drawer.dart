@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:chat_app/core/service%20locator/service_locator.dart';
 import 'package:chat_app/core/utils/app_colors.dart';
 import 'package:chat_app/features/Auth/presentation/controller/auth_cubit.dart';
+import 'package:chat_app/features/home/presentation/views/widgets/cusom_user_tile.dart';
 import 'package:chat_app/features/home/presentation/views/widgets/custom_user_list.dart';
+import 'package:chat_app/features/home/presentation/views/widgets/skeletonizer_users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +16,7 @@ class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomDrawerState createState() => _CustomDrawerState();
 }
 
@@ -23,8 +28,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     super.initState();
+    // Fetch and log chat IDs for the current user
     _initializeDrawerItems();
-    //_initializeDrawer();
   }
 
   void _initializeDrawerItems() {
@@ -36,18 +41,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
       SampleListModel(
         title: "Chats",
-        icon: Icons.message_outlined,
-        launchWidget: Center(child: Text("Chat View", style: boldTextStyle)),
+        icon: Icons.chat_bubble_outline,
+        launchWidget: CurrentChatsScreen(),
       ),
       SampleListModel(
         title: "Notification",
         icon: Icons.notifications_none,
-        launchWidget: Center(child: Text("Notification View", style: boldTextStyle)),
+        launchWidget: Center(child: Text("Notification")),
       ),
       SampleListModel(
         title: "Settings",
         icon: Icons.settings,
-        launchWidget: Center(child: Text("Settings View", style: boldTextStyle)),
+        launchWidget: SettingsScreen(),
       ),
     ]);
   }
@@ -87,7 +92,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-   Widget _buildUserProfile() {
+  Widget _buildUserProfile() {
     return Container(
       padding: EdgeInsets.only(left: 16, top: 24),
       child: Row(
@@ -106,6 +111,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     );
   }
+
   Widget _buildDrawerItem(SampleListModel item) {
     return ListTile(
       title: Text(
@@ -210,15 +216,121 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   Widget _buildSelectedContent() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        drawerItems[drawerState.selectedIndex].launchWidget ?? SizedBox(),
+        SizedBox(height: 16),
+      ],
+    );
+  }
+}
+
+class CurrentChatsScreen extends StatelessWidget {
+  const CurrentChatsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<String>>(
+      stream: Stream.fromFuture(getChats(context, AuthCubit.get(context).currentUser!.uid)),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SkeletonizerUserList();
+        } else if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
+        }
+        final users = snapshot.data!;
+        log(users.toString());
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                return UserTile(
+                  username: "username",
+                  status: "status",
+                  userId: "userId",
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+Future<List<String>> getChats(BuildContext context, String currentUserId) async {
+  log("Getting Chats ********************************************");
+  final chatCollection = sl.get<FirebaseFirestore>().collection('chat_rooms');
+
+  // Fetch all chat rooms from Firestore
+  final snapshot = await chatCollection.get();
+
+  // Log snapshot data (iterating over docs and logging their IDs and data)
+  log("Snapshot size: ${snapshot.size}");
+  List<String> chatIds = [];
+
+  for (var doc in snapshot.docs) {
+    log("Document ID: ${doc.id}"); // Log the document ID
+    log("Document Data: ${doc.data()}"); // Log the actual data of the document
+
+    // Assuming 'roomId' is the chat room ID, which contains the sorted user IDs
+    String roomId = doc.id;
+
+    // Extract the user IDs from the roomId and check if currentUserId is part of the chat
+    List<String> roomUsers = roomId.split('-');
+    log("Room Users: $roomUsers");
+
+    if (roomUsers.contains(currentUserId)) {
+      chatIds.add(doc.id);
+      log("Chat ID: ${doc.id}");
+    }
+  }
+
+  log(" ******************************************** ");
+  return chatIds; // Return a list of chat IDs that contain the currentUserId
+}
+
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isSwitched = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          drawerItems[drawerState.selectedIndex].launchWidget ?? SizedBox(),
-          SizedBox(height: 16),
-        ],
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(12.0),
       ),
+      margin: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(16.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(
+          "Dark Mode",
+          style: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
+        CupertinoSwitch(
+          value: _isSwitched,
+          onChanged: (value) {
+            setState(() {
+              _isSwitched = !_isSwitched;
+            });
+          },
+        ),
+      ]),
     );
   }
 }

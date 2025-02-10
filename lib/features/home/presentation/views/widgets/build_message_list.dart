@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class BuildMessagesList extends StatelessWidget {
-  const BuildMessagesList({super.key, this.messageStream, required this.auth,required this.controller});
+  const BuildMessagesList({super.key, this.messageStream, required this.auth, required this.controller});
   final Stream<QuerySnapshot<Object?>>? messageStream;
   final FirebaseAuth auth;
   final ScrollController controller;
@@ -24,7 +24,16 @@ class BuildMessagesList extends StatelessWidget {
         } else if (snapshot.hasData) {
           final messages = snapshot.data!.docs;
           if (messages.isEmpty) {
-            return const Center(child: Text('No messages yet'));
+            return const Center(
+              child: Text(
+                'No messages yet!',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
           }
           return ListView.builder(
             reverse: true,
