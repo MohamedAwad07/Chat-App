@@ -43,9 +43,9 @@ class AuthCubit extends Cubit<AuthStates> {
                 ),
               ), (user) {
         currentUser = user;
-        emit(
-          LoginWithGoogleSuccess(userInfo: user),
-        );
+        // emit(
+        //   Authenticated(user: user),
+        // );
       });
     } catch (e) {
       emit(
@@ -67,9 +67,9 @@ class AuthCubit extends Cubit<AuthStates> {
                 ),
               ), (user) {
         currentUser = user;
-        emit(
-          LoginWithEmailAndPasswordSuccess(userInfo: user),
-        );
+        // emit(
+        //   Authenticated(user: user),
+        // );
       });
     } catch (e) {
       emit(
@@ -90,9 +90,9 @@ class AuthCubit extends Cubit<AuthStates> {
               ),
             ), (user) {
       currentUser = user;
-      emit(
-        RegisterNewUserSuccess(userInfo: user),
-      );
+      // emit(
+      //   Authenticated(user: user),
+      // );
     });
   }
 

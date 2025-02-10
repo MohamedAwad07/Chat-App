@@ -52,6 +52,7 @@ class RegisterForm extends StatelessWidget {
             spacing: 16,
             children: [
               CustomTextFormField(
+                autoFocus: true,
                 keyboardType: TextInputType.name,
                 labelText: 'Username',
                 hintText: 'Enter your username',

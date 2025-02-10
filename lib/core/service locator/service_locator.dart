@@ -28,7 +28,7 @@ class ServiceLocator {
   }
 
   static void _registerCubits() {
-    sl.registerFactory<AuthCubit>(() => AuthCubit(authService: sl<AuthService>()));
+    sl.registerLazySingleton<AuthCubit>(() => AuthCubit(authService: sl<AuthService>()));
   }
 
   static void _registerCore() {

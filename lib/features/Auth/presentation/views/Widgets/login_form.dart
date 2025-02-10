@@ -61,6 +61,7 @@ class LoginForm extends StatelessWidget {
               spacing: 16,
               children: [
                 CustomTextFormField(
+                  autoFocus: true,
                   keyboardType: TextInputType.emailAddress,
                   labelText: 'Email',
                   hintText: 'example@gmail.com',

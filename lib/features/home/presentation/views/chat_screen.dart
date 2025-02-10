@@ -117,6 +117,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: TextField(
+                autofocus: true,
                 controller: _messageController,
                 decoration: const InputDecoration(
                   focusColor: AppColors.primaryLight,

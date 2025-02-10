@@ -11,7 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   IconData? suffixIcon;
-
+  bool autoFocus = false;
   CustomTextFormField({
     super.key,
     required this.labelText,
@@ -21,11 +21,13 @@ class CustomTextFormField extends StatelessWidget {
     required this.validator,
     required this.keyboardType,
     this.suffixIcon,
+    this.autoFocus = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: autoFocus,
       keyboardType: keyboardType,
       controller: controller,
       validator: validator,
